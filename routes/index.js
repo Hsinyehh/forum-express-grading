@@ -45,6 +45,10 @@ module.exports = (app, passport) => {
   //瀏覽
   app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
 
+  //編輯
+  app.get('/admin/restaurants/:id/edit', authenticatedAdmin, adminController.editRestaurant)
+  app.put('/admin/restaurants/:id', authenticatedAdmin, adminController.putRestaurant)
+
 
   //後台
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
