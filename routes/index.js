@@ -29,13 +29,22 @@ module.exports = (app, passport) => {
     res.redirect('/admin/restaurants')
   })
 
-
+  //註冊
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
-
+  //登入
   app.get('/signin', userController.signInPage)
   app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
+  //登出
   app.get('/logout', userController.logout)
+
+  //新增
+  app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
+  app.post('/admin/restaurants', authenticatedAdmin, adminController.postRestaurant)
+
+  //瀏覽
+  app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
+
 
   //後台
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
