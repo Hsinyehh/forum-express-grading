@@ -3,17 +3,18 @@ const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
+const helpers = require('../_helpers')
 
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      if (req.user.isAdmin) { return next() }
+    if (helpers.ensureAuthenticated(req)) {
+      if (helpers.getUser(req).isAdmin) { return next() }
       return res.redirect('/')
     }
     res.redirect('/signin')
@@ -55,9 +56,12 @@ module.exports = (app, passport) => {
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
 
 
-  //後台
+  //後台(Restaurant)
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
   app.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
 
+  //後台(User)
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
+  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.putUser)
 
 }
