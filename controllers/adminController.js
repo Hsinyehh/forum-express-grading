@@ -9,7 +9,11 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const adminController = {
   //Restaurant
   getRestaurants: (req, res) => {
-    return Restaurant.findAll({ raw: true })
+    return Restaurant.findAll({
+      order: [
+        ['updatedAt', 'DESC'],
+      ], raw: true
+    })
       .then(restaurants => { return res.render('admin/restaurants', { restaurants: restaurants }) })
   },
   createRestaurant: (req, res) => {
