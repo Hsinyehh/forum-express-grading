@@ -1,6 +1,7 @@
 const userController = require('../controllers/userController')
 const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController')
+const categoryController = require('../controllers/categoryController')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 const helpers = require('../_helpers')
@@ -41,18 +42,18 @@ module.exports = (app, passport) => {
   //登出
   app.get('/logout', userController.logout)
 
-  //新增
+  //新增(Restaurant)
   app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
   app.post('/admin/restaurants', authenticatedAdmin, upload.single('image'), adminController.postRestaurant)
 
-  //瀏覽
+  //瀏覽(Restaurant)
   app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
 
-  //編輯
+  //編輯(Restaurant)
   app.get('/admin/restaurants/:id/edit', authenticatedAdmin, adminController.editRestaurant)
   app.put('/admin/restaurants/:id', authenticatedAdmin, upload.single('image'), adminController.putRestaurant)
 
-  //刪除
+  //刪除(Restaurant)
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
 
 
@@ -63,5 +64,8 @@ module.exports = (app, passport) => {
   //後台(User)
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.putUser)
+
+  //後台(Category)
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
 
 }
