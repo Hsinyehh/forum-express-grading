@@ -39,6 +39,8 @@ module.exports = (app, passport) => {
   //前台(評論)
   app.post('/comments', authenticated, commentController.postComment)
 
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+
   //註冊
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
