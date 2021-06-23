@@ -2,6 +2,7 @@ const userController = require('../controllers/userController')
 const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController')
 const categoryController = require('../controllers/categoryController')
+const commentController = require('../controllers/commentController')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 const helpers = require('../_helpers')
@@ -34,6 +35,9 @@ module.exports = (app, passport) => {
   app.get('/admin', (req, res) => {
     res.redirect('/admin/restaurants')
   })
+
+  //前台(評論)
+  app.post('/comments', authenticated, commentController.postComment)
 
   //註冊
   app.get('/signup', userController.signUpPage)
@@ -75,5 +79,7 @@ module.exports = (app, passport) => {
   app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)
 
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
+
+
 
 }
