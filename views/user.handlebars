@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="row">
+    <div class="col-4">
+      <img class="img-responsive center-block" src="{{viewUser.image}}" style="width: 250px;margin-bottom: 25px;">
+    </div>
+    <div class="col-8">
+      <h1>{{viewUser.name}}</h1>
+      <p>{{viewUser.email}}</p>
+      {{#ifCond viewUser.id userID}}
+      <form action="/users/{{viewUser.id}}/edit" method="GET" class="my-5">
+        <button type="submit" class="btn btn-primary">Edit</button>
+      </form>
+      {{/ifCond}}
+    </div>
+  </div>
+</div>
