@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const Restaurant = db.Restaurant
+const Comment = db.Comment
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -63,35 +65,50 @@ const userController = {
 
     if (helpers.getUser(req).id === Number(req.params.id)) {
       const userID = helpers.getUser(req).id
-      return User.findByPk(req.params.id)
-        .then(viewUser => {
-          return res.render('user', {
-            viewUser: viewUser.toJSON(),
-            userID: userID
-          })
+      return User.findByPk(req.params.id, {
+        include: { model: Comment, include: [Restaurant] }
+      })
+        .then(viewUser => Comment.findAndCountAll({
+          where: { UserId: req.params.id }
         })
+          .then(result => {
+            console.log(result.rows)
+            return res.render('user', {
+              viewUser: viewUser.toJSON(),
+              userID: userID,
+              count: result.count
+            })
+          }))
     }
     else {
-      return User.findByPk(req.params.id)
-        .then(viewUser => {
-          return User.findByPk(helpers.getUser(req).id)
-            .then(user => {
-              return res.render('user', { viewUser: viewUser.toJSON(), user: user.toJSON() })
-            }
-            )
-        }
+      return User.findByPk(req.params.id, {
+        include: { model: Comment, include: [Restaurant] }
+      })
+        .then(viewUser => Comment.findAndCountAll({
+          where: { UserId: req.params.id }
+        })
+          .then(result => {
+            return User.findByPk(helpers.getUser(req).id)
+              .then(user => {
+                return res.render('user', { viewUser: viewUser.toJSON(), user: user.toJSON(), count: result.count })
+              })
+          })
         )
     }
   },
 
   editUser: (req, res) => {
-
-    return User.findByPk(req.params.id)
-      .then(viewUser => {
-        return res.render('userEdit', {
-          viewUser: viewUser.toJSON()
+    if (helpers.getUser(req).id === Number(req.params.id)) {
+      return User.findByPk(req.params.id)
+        .then(viewUser => {
+          return res.render('userEdit', {
+            viewUser: viewUser.toJSON()
+          })
         })
-      })
+    }
+    else {
+
+    }
 
   },
   putUser: (req, res) => {
