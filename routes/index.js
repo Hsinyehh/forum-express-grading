@@ -40,6 +40,9 @@ module.exports = (app, passport) => {
     res.redirect('/admin/restaurants')
   })
 
+  app.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
+  app.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
+
   //前台(評論)
   app.post('/comments', authenticated, commentController.postComment)
 
