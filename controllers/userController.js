@@ -72,7 +72,6 @@ const userController = {
           where: { UserId: req.params.id }
         })
           .then(result => {
-            console.log(result.rows)
             return res.render('user', {
               viewUser: viewUser.toJSON(),
               userID: userID,
