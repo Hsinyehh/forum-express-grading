@@ -72,6 +72,7 @@ const userController = {
           { model: Comment, include: [Restaurant] },
           { model: User, as: 'Followings' },
           { model: User, as: 'Followers' },
+          { model: Restaurant, as: 'FavoritedRestaurants' },
         ]
       })
         .then(async (viewUser) => {
@@ -85,6 +86,7 @@ const userController = {
             CommentCount: result.count,
             FollowingCount: viewUser.Followings.length,
             FollowerCount: viewUser.Followers.length,
+            FavorRestCount: viewUser.FavoritedRestaurants.length,
             isFollowed: isFollowed
           })
         })
@@ -96,6 +98,7 @@ const userController = {
           { model: Comment, include: [Restaurant] },
           { model: User, as: 'Followings' },
           { model: User, as: 'Followers' },
+          { model: Restaurant, as: 'FavoritedRestaurants' },
         ]
       })
         .then(async (viewUser) => {
@@ -110,7 +113,8 @@ const userController = {
             CommentCount: result.count,
             FollowingCount: viewUser.Followings.length,
             FollowerCount: viewUser.Followers.length,
-            isFollowed: isFollowed
+            FavorRestCount: viewUser.FavoritedRestaurants.length,
+            isFollowed: isFollowed,
           })
         })
     }
