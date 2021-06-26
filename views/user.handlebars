@@ -39,7 +39,7 @@
       <div class="card-body">
         <div class="row">
           {{#each viewUser.Followings}}
-          <a href="/restaurants/{{this.id}}" class="mx-3">
+          <a href="/users/{{this.id}}" class="mx-3">
             <img class="img-responsive center-block" src="{{this.image}}"
               style="width: 50px;height: 40px;margin-bottom: 25px;">
           </a>
@@ -71,7 +71,7 @@
       <div class="card-body">
         <div class="row">
           {{#each viewUser.Followers}}
-          <a href="/restaurants/{{this.id}}" class="mx-3">
+          <a href="/users/{{this.id}}" class="mx-3">
             <img class="img-responsive center-block" src="{{this.image}}"
               style="width: 50px;height: 40px;margin-bottom: 25px;">
           </a>
