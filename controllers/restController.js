@@ -63,8 +63,8 @@ const restController = {
         { model: Comment, include: [User] }
       ]
     }).then(restaurant => {
-      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
-      const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
+      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(helpers.getUser(req).id)
+      const isLiked = restaurant.LikedUsers.map(d => d.id).includes(helpers.getUser(req).id)
       let viewCounts = restaurant.viewCounts + 1
       restaurant.update({ viewCounts: viewCounts })
       return res.render('restaurant', {
@@ -109,6 +109,27 @@ const restController = {
         commentCount: result.count
       })
     })
+  },
+  getTopRestaurants: (req, res) => {
+    return Restaurant.findAll({
+      include: [
+        { model: User, as: 'FavoritedUsers' }
+      ],
+      limit: 10
+    }).then(restaurants => {
+      //console.log(restaurants.dataValues)
+      restaurants = restaurants.map(r => ({
+        ...r.dataValues,
+        description: r.description.substring(0, 50),
+        FavoritedCount: r.FavoritedUsers.length,
+        isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id)
+      }))
+      // 依收藏數排序清單
+      restaurants = restaurants.sort((a, b) => b.FavoritedCount - a.FavoritedCount)
+      let tenRestaurants = restaurants.slice(0, 10)
+      return res.render('topRestaurant', { restaurants: tenRestaurants })
+    })
+      .catch((error) => { console.log('Error') })
   }
 }
 
