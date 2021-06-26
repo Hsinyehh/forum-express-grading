@@ -105,7 +105,8 @@ const userController = {
         })
     }
     else {
-
+      req.flash('error_messages', '不得編輯該使用者檔案！')
+      return res.redirect(`/users/${req.params.id}`)
     }
 
   },
