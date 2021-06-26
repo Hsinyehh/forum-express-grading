@@ -1,32 +1,99 @@
-<div class="card">
-  <div class="row">
-    <div class="col-3 mt-3 ml-3">
-      <img class="img-responsive center-block" src="{{viewUser.image}}" style="width: 250px;margin-bottom: 25px;">
-    </div>
-    <div class="col-7">
-      <h1>{{viewUser.name}}</h1>
-      <p>{{viewUser.email}}</p>
-      <p>{{count}} 家已評論餐廳</p>
-      {{#ifCond viewUser.id userID}}
-      <form action="/users/{{viewUser.id}}/edit" method="GET" class="my-5">
-        <button type="submit" class="btn btn-primary">Edit</button>
-      </form>
-      {{/ifCond}}
+<div class="row">
+  <div class="col-12">
+    <div class="card ">
+      <div class="row">
+        <div class="col-3 mt-3 ml-3">
+          <img class="img-responsive center-block" src="{{viewUser.image}}" style="width: 250px;margin-bottom: 25px;">
+        </div>
+        <div class="col-6 mt-3">
+          <h1>{{viewUser.name}}</h1>
+          <p>{{viewUser.email}}</p>
+          <p>{{CommentCount}} 家已評論餐廳<br>
+            {{CommentCount}} 家已收藏餐廳<br>
+            {{FollowingCount}} Followings<br>
+            {{FollowerCount}} Followers</p>
+          <div class="my-5">
+            {{#if isFollowed }}
+            <form action="/following/{{viewUser.id}}?_method=DELETE" method="POST" style="display: inline;"><button
+                type="submit" class="btn btn-danger">取消追蹤</button></form>
+            {{else}}
+            <form action="/following/{{viewUser.id}}" method="POST" style="display: inline; "><button type="submit"
+                class="btn btn-primary">追蹤</button></form>
+            {{/if}}
+            {{#ifCond viewUser.id userID}}
+            <form action="/users/{{viewUser.id}}/edit" method="GET" style="display: inline;">
+              <button type=" submit" class="btn btn-primary">Edit</button>
+            </form>
+            {{/ifCond}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<div class="row justify-content-between my-3">
+  <div class="col-4 my-3 ">
+    <div class="card">
+      <h5 class="card-header">{{FollowingCount}} Followings</h5>
+      <div class="card-body">
+        <div class="row">
+          {{#each viewUser.Followings}}
+          <a href="/restaurants/{{this.id}}" class="mx-3">
+            <img class="img-responsive center-block" src="{{this.image}}"
+              style="width: 50px;height: 40px;margin-bottom: 25px;">
+          </a>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="card my-3">
-  <h5 class="card-header">{{count}} 家已評論餐廳</h5>
-  <div class="card-body">
-    <div class="row">
-      {{#each viewUser.Comments}}
-      <a href="/restaurants/{{this.Restaurant.id}}" class="mx-3">
-        <img class="img-responsive center-block" src="{{this.Restaurant.image}}"
-          style="width: 100px;margin-bottom: 25px;">
-      </a>
-      {{/each}}
+  <div class="col-8 my-3">
+    <div class="card">
+      <h5 class="card-header">{{CommentCount}} 家已評論餐廳</h5>
+      <div class="card-body">
+        <div class="row">
+          {{#each viewUser.Comments}}
+          <a href="/restaurants/{{this.Restaurant.id}}" class="mx-3">
+            <img class="img-responsive center-block" src="{{this.Restaurant.image}}"
+              style="width: 50px;height: 40px;margin-bottom: 25px;">
+          </a>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4 my-3 ">
+    <div class="card ">
+      <h5 class="card-header">{{FollowerCount}} Followers</h5>
+      <div class="card-body">
+        <div class="row">
+          {{#each viewUser.Followers}}
+          <a href="/restaurants/{{this.id}}" class="mx-3">
+            <img class="img-responsive center-block" src="{{this.image}}"
+              style="width: 50px;height: 40px;margin-bottom: 25px;">
+          </a>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-8 my-3">
+    <div class="card">
+      <h5 class="card-header">{{CommentCount}} 家已收藏餐廳</h5>
+      <div class="card-body">
+        <div class="row">
+          {{#each viewUser.Comments}}
+          <a href="/restaurants/{{this.Restaurant.id}}" class="mx-3">
+            <img class="img-responsive center-block" src="{{this.Restaurant.image}}"
+              style="width: 50px;height: 40px;margin-bottom: 25px;">
+          </a>
+          {{/each}}
+        </div>
+      </div>
     </div>
   </div>
 </div>

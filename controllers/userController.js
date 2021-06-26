@@ -68,29 +68,50 @@ const userController = {
     if (helpers.getUser(req).id === Number(req.params.id)) {
       const userID = helpers.getUser(req).id
       return User.findByPk(req.params.id, {
-        include: { model: Comment, include: [Restaurant] }
+        include: [
+          { model: Comment, include: [Restaurant] },
+          { model: User, as: 'Followings' },
+          { model: User, as: 'Followers' },
+        ]
       })
         .then(async (viewUser) => {
+          let isFollowed = helpers.getUser(req).Followings.map(d => d.id).includes(viewUser.id)
           let result = await Comment.findAndCountAll({
             where: { UserId: req.params.id }
           })
           return res.render('user', {
             viewUser: viewUser.toJSON(),
             userID: userID,
-            count: result.count
+            CommentCount: result.count,
+            FollowingCount: viewUser.Followings.length,
+            FollowerCount: viewUser.Followers.length,
+            isFollowed: isFollowed
           })
         })
     }
+    //如果要查看其他使用者，要提供登入者和其他使用者的資料
     else {
       return User.findByPk(req.params.id, {
-        include: { model: Comment, include: [Restaurant] }
+        include: [
+          { model: Comment, include: [Restaurant] },
+          { model: User, as: 'Followings' },
+          { model: User, as: 'Followers' },
+        ]
       })
         .then(async (viewUser) => {
           let result = await Comment.findAndCountAll({
             where: { UserId: req.params.id }
           })
+          let isFollowed = helpers.getUser(req).Followings.map(d => d.id).includes(viewUser.id)
           let user = await User.findByPk(helpers.getUser(req).id)
-          return res.render('user', { viewUser: viewUser.toJSON(), user: user.toJSON(), count: result.count })
+          return res.render('user', {
+            viewUser: viewUser.toJSON(),
+            user: user.toJSON(),
+            CommentCount: result.count,
+            FollowingCount: viewUser.Followings.length,
+            FollowerCount: viewUser.Followers.length,
+            isFollowed: isFollowed
+          })
         })
     }
   },
@@ -220,7 +241,6 @@ const userController = {
         return res.redirect('back')
       })
   },
-
   removeFollowing: (req, res) => {
     return Followship.findOne({
       where: {
