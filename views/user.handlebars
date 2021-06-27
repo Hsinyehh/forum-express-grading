@@ -12,13 +12,16 @@
             {{FavorRestCount}} 家已收藏餐廳<br>
             {{FollowingCount}} Followings<br>
             {{FollowerCount}} Followers</p>
+
           <div class="my-5">
+            {{#if isOtherpRrofile}}
             {{#if isFollowed }}
             <form action="/following/{{viewUser.id}}?_method=DELETE" method="POST" style="display: inline;"><button
                 type="submit" class="btn btn-danger">取消追蹤</button></form>
             {{else}}
             <form action="/following/{{viewUser.id}}" method="POST" style="display: inline; "><button type="submit"
                 class="btn btn-primary">追蹤</button></form>
+            {{/if}}
             {{/if}}
             {{#ifCond viewUser.id userID}}
             <form action="/users/{{viewUser.id}}/edit" method="GET" style="display: inline;">

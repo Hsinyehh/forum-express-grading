@@ -65,7 +65,9 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    if (helpers.getUser(req).id === Number(req.params.id)) {
+    let isMyProfile = helpers.getUser(req).id === Number(req.params.id)
+    let isOtherpRrofile = !isMyProfile
+    if (isMyProfile) {
       const userID = helpers.getUser(req).id
       return User.findByPk(req.params.id, {
         include: [
@@ -87,7 +89,8 @@ const userController = {
             FollowingCount: viewUser.Followings.length,
             FollowerCount: viewUser.Followers.length,
             FavorRestCount: viewUser.FavoritedRestaurants.length,
-            isFollowed: isFollowed
+            isFollowed: isFollowed,
+            isOtherpRrofile: isOtherpRrofile
           })
         })
     }
@@ -115,6 +118,7 @@ const userController = {
             FollowerCount: viewUser.Followers.length,
             FavorRestCount: viewUser.FavoritedRestaurants.length,
             isFollowed: isFollowed,
+            isOtherpRrofile: isOtherpRrofile
           })
         })
     }
@@ -217,19 +221,22 @@ const userController = {
     })
   },
   getTopUser: (req, res) => {
+
     // 撈出所有 User 與 followers 資料
     return User.findAll({
       include: [
         { model: User, as: 'Followers' }
       ]
     }).then(users => {
+      function isOtherProfile(a, b) { return !(a === b) }
       // 整理 users 資料
       users = users.map(user => ({
         ...user.dataValues,
         // 計算追蹤者人數
         FollowerCount: user.Followers.length,
         // 判斷目前登入使用者是否已追蹤該 User 物件
-        isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
+        isFollowed: helpers.getUser(req).Followings.map(d => d.id).includes(user.id),
+        isOtherRrofile: isOtherProfile(helpers.getUser(req).id, Number(user.id))
       }))
       // 依追蹤者人數排序清單
       users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
