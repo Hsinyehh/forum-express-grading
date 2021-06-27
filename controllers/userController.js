@@ -65,37 +65,33 @@ const userController = {
   },
 
   getUser: (req, res) => {
-
     if (helpers.getUser(req).id === Number(req.params.id)) {
       const userID = helpers.getUser(req).id
       return User.findByPk(req.params.id, {
         include: { model: Comment, include: [Restaurant] }
       })
-        .then(viewUser => Comment.findAndCountAll({
-          where: { UserId: req.params.id }
+        .then(async (viewUser) => {
+          let result = await Comment.findAndCountAll({
+            where: { UserId: req.params.id }
+          })
+          return res.render('user', {
+            viewUser: viewUser.toJSON(),
+            userID: userID,
+            count: result.count
+          })
         })
-          .then(result => {
-            return res.render('user', {
-              viewUser: viewUser.toJSON(),
-              userID: userID,
-              count: result.count
-            })
-          }))
     }
     else {
       return User.findByPk(req.params.id, {
         include: { model: Comment, include: [Restaurant] }
       })
-        .then(viewUser => Comment.findAndCountAll({
-          where: { UserId: req.params.id }
-        })
-          .then(result => {
-            return User.findByPk(helpers.getUser(req).id)
-              .then(user => {
-                return res.render('user', { viewUser: viewUser.toJSON(), user: user.toJSON(), count: result.count })
-              })
+        .then(async (viewUser) => {
+          let result = await Comment.findAndCountAll({
+            where: { UserId: req.params.id }
           })
-        )
+          let user = await User.findByPk(helpers.getUser(req).id)
+          return res.render('user', { viewUser: viewUser.toJSON(), user: user.toJSON(), count: result.count })
+        })
     }
   },
 
