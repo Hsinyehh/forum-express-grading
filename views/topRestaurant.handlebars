@@ -15,30 +15,33 @@
 <br /><br />
 <h1>人氣餐廳</h1>
 <hr />
-<div class="row" style="text-align: center;">
+<div class="row justify-content-center">
   {{#each restaurants}}
-  <div class="card">
-    <div class="row">
-      <div class="col-3 mt-3 ml-3">
-        <img class="img-responsive center-block" src="{{this.image}}" style="width: 250px;margin-bottom: 25px;">
-      </div>
-      <div class="col-7">
-        <h1>{{this.name}}</h1>
-        <span class="badge badge-secondary">收藏數：</span>
-        <p>{{this.description}}</p>
+  <div class="col-9">
+    <div class="card">
+      <div class="row justify-content-center">
+        <div class="col-3 mt-4 ml-3">
+          <img class="img-responsive center-block" src="{{this.image}}" style="width: 200px;margin-bottom: 25px;">
+        </div>
+        <div class="col-8 my-4 ml-3">
 
-        <form action="/restaurants/{{this.id}}" method="GET" style="display: inline;">
-          <button type="submit" class="btn btn-primary">Show</button>
-        </form>
-        {{#if this.isFavorited }}
-        <form action="/favorite/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-danger">移除最愛</button>
-        </form>
-        {{else}}
-        <form action="/favorite/{{this.id}}" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-primary">加到最愛</button>
-        </form>
-        {{/if}}
+          <h3>{{this.name}}</h3>
+          <span class="badge badge-secondary">收藏數：{{this.FavoritedCount}}</span>
+          <p>{{this.description}}</p>
+          <form action="/restaurants/{{this.id}}" method="GET" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Show</button>
+          </form>
+          {{#if this.isFavorited }}
+          <form action="/favorite/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-danger">移除最愛</button>
+          </form>
+          {{else}}
+          <form action="/favorite/{{this.id}}" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-primary">加到最愛</button>
+          </form>
+          {{/if}}
+
+        </div>
       </div>
     </div>
   </div>

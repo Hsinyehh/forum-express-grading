@@ -115,7 +115,6 @@ const restController = {
       include: [
         { model: User, as: 'FavoritedUsers' }
       ],
-      limit: 10
     }).then(restaurants => {
       //console.log(restaurants.dataValues)
       restaurants = restaurants.map(r => ({
