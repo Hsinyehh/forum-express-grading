@@ -10,6 +10,7 @@ const adminService = require('../services/adminService.js')
 
 const adminController = {
   //Restaurant
+  //Done
   getRestaurants: (req, res) => {
     adminService.getRestaurants(req, res, (data) => {
       return res.render('admin/restaurants', data)
@@ -66,10 +67,8 @@ const adminController = {
 
   },
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, { include: [Category] }).then(restaurant => {
-      return res.render('admin/restaurant', {
-        restaurant: restaurant.toJSON()
-      })
+    adminService.getRestaurant(req, res, (data) => {
+      return res.render('admin/restaurant', data)
     })
   },
   editRestaurant: (req, res) => {
