@@ -23,4 +23,6 @@ router.put('/admin/restaurants/:id', upload.single('image'), adminController.put
 //後台(Categoty)
 router.get('/admin/categories', categoryController.getCategories)
 
+router.post('/admin/categories', categoryController.postCategory)
+
 module.exports = router
