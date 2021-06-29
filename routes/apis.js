@@ -10,12 +10,14 @@ router.get('/admin/restaurants', adminController.getRestaurants)
 
 router.get('/admin/restaurant/:id', adminController.getRestaurant)
 
-
 router.delete('/admin/restaurants/:id', adminController.deleteRestaurant)
 
 router.post('/admin/restaurants', upload.single('image'), adminController.postRestaurant)
 
 router.get('/admin/restaurants/:id/edit', adminController.editRestaurant)
+
+router.put('/admin/restaurants/:id', upload.single('image'), adminController.putRestaurant)
+
 
 
 //後台(Categoty)
