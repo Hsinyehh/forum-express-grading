@@ -21,6 +21,7 @@ app.engine('handlebars', handlebars({ defaultLayout: 'main', helpers: require('.
 app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 
 app.use(session({
